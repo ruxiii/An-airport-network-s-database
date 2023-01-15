@@ -1,0 +1,834 @@
+4.
+
+create table AEROPORT(
+    ID_AEROPORT int not null primary key,
+    NUME_AEROPORT varchar2(50),
+    LOCATIE_AEROPORT varchar2(50),
+    NUMAR_ZBORURI_AN int,
+    NUMAR_CALATORI_AN long
+);
+
+--drop table AEROPORT;
+
+create table DEPARTAMENTE(
+    ID_DEPARTAMENT int not null primary key,
+    NUME_DEPARTAMENT varchar2(30),
+    NUMAR_ANGAJATI int,
+    ID_AEROPORT not null,
+    foreign key (ID_AEROPORT) references AEROPORT(ID_AEROPORT)
+);
+
+--drop table DEPARTAMENTE;
+
+create table ANGAJATI(
+    ID_ANGAJAT int not null primary key,
+    NUME_ANGAJAT varchar2(20),
+    DATA_ANGAJARII varchar2(30),
+    SALARIU_ANGAJATI int,
+    ID_DEPARTAMENT not null,
+    foreign key(ID_DEPARTAMENT) references DEPARTAMENTE(ID_DEPARTAMENT)
+);
+
+--drop table ANGAJATI;
+
+create table TURN_CONTROL(
+    ID_TURN_CONTROL int not null primary key,
+    NUMAR_AERONAVE_COORDONATE long,
+    NUMAR_CONTROLORI_TRAFIC int,
+    ID_AEROPORT not null,
+    foreign key(ID_AEROPORT) references AEROPORT(ID_AEROPORT)
+);
+
+--drop table TURN_CONTROL;
+
+create table COMPANII_AERIENE(
+    ID_COMPANIE int not null primary key,
+    NUME_COMPANIE varchar2(50),
+    NUMAR_AVION_COMPANIE long,
+    ORAS_SEDIU varchar2(30),
+    ID_AEROPORT not null,
+    foreign key(ID_AEROPORT) references AEROPORT(ID_AEROPORT)
+);
+
+--drop table COMPANII_AERIENE;
+
+create table AVIOANE(
+    ID_AVION int not null primary key,
+    TIP_AVION varchar2(20),
+    ID_COMPANIE not null,
+    foreign key(ID_COMPANIE) references COMPANII_AERIENE(ID_COMPANIE)
+);
+
+--drop table AVIOANE;
+
+create table ZBORURI(
+    ID_ZBOR int not null primary key,
+    DESTINATIE_ZBOR varchar2(30),
+    DURATA_CALATORIEI_IN_ORE int,
+    ID_AEROPORT not null,
+    ID_COMPANIE not null,
+    foreign key(ID_COMPANIE) references COMPANII_AERIENE(ID_COMPANIE),
+    foreign key(ID_AEROPORT) references AEROPORT(ID_AEROPORT)
+);
+
+--drop table ZBORURI;
+
+create table PASAGERI (
+    ID_PASAGER int not null primary key,
+    NUME_PASAGER varchar2(20),
+    NATIONALITATE varchar2(30),
+    TARA_DE_PROVENIENTA varchar2(30),
+    ID_AEROPORT not null,
+    foreign key(ID_AEROPORT) references AEROPORT(ID_AEROPORT)
+);
+
+--drop table PASAGERI;
+
+create table BILETE (
+    ID_BILET int not null primary key,
+    OPERATOR_BILET varchar2(50),
+    PRET int,
+    ID_PASAGER not null,
+    foreign key(ID_PASAGER) references PASAGERI(ID_PASAGER)
+);
+
+--drop table BILETE;
+
+create table BAGAJE (
+    ID_BAGAJ int not null primary key,
+    DESTINATIE_FINALA_BAGAJ varchar2(30),
+    ID_AEROPORT not null,
+    ID_PASAGER not null,
+    foreign key(ID_AEROPORT) references AEROPORT(ID_AEROPORT),
+    foreign key(ID_PASAGER) references PASAGERI(ID_PASAGER)
+);
+
+--drop table BAGAJE;
+
+create table DESTINATIE (
+    ID_DESTINATIE int not null primary key,
+    ORA_SOSIRII int,
+    ID_AEROPORT not null,
+    ID_PASAGER not null,
+    foreign key(ID_AEROPORT) references AEROPORT(ID_AEROPORT),
+    foreign key(ID_PASAGER) references PASAGERI(ID_PASAGER)
+);
+
+--drop table DESTINATIE;
+
+create table ESTE_TRANZITAT (
+    ID_PASAGER int not null, 
+    ID_AEROPORT int not null,
+    constraint pk_este_tranzitat primary key(ID_PASAGER, ID_AEROPORT)
+);
+
+-- drop table ESTE_TRANZITAT;
+
+create table AJUNG (
+    ID_PASAGER int not null, 
+    ID_AEROPORT int not null,
+    ID_BAGAJ int not null,
+    constraint pk_ajung primary key(ID_PASAGER, ID_AEROPORT, ID_BAGAJ)
+);
+
+--drop table AJUNG;
+
+
+
+
+5.
+
+insert into AEROPORT values (1000, 'Henri Coanda', 'Bucuresti', 500, 20000);
+insert into AEROPORT values (1100, 'Schipol', 'Amsterdam', 1000, 100500);
+insert into AEROPORT values (1200, 'Heathrow', 'Londra', 1500, 300000);
+insert into AEROPORT values (1300, 'Charles de Gaulle', 'Paris', 1100, 100000);
+insert into AEROPORT values (1400, 'John F. Kennedy', 'New York', 2000, 900000);
+insert into AEROPORT values (1500, 'Beijing', 'Beijing', 3000, 1000000);
+
+ 
+
+
+
+insert into DEPARTAMENTE values (1001, 'HR' ,100, 1000);
+insert into DEPARTAMENTE values (1002, 'PR' ,100, 1000);
+insert into DEPARTAMENTE values (1003, 'Logistica', 50, 1100);
+insert into DEPARTAMENTE values (1004, 'Comercial', 40, 1100);
+insert into DEPARTAMENTE values (1005, 'Marketing', 25, 1200);
+insert into DEPARTAMENTE values (1006, 'Control', 10, 1200);
+insert into DEPARTAMENTE values (1007, 'Securitate', 5, 1300);
+insert into DEPARTAMENTE values (1008, 'Operatiuni', 80, 1300);
+insert into DEPARTAMENTE values (1009, 'Management', 45, 1400);
+insert into DEPARTAMENTE values (1010, 'Achizitii', 30, 1400);
+insert into DEPARTAMENTE values (1011, 'Finante', 100, 1500);
+insert into DEPARTAMENTE values (1012, 'Dezvoltare', 30, 1500);
+insert into DEPARTAMENTE values (1013, 'Director_1000', 5, 1000);
+insert into DEPARTAMENTE values (1014, 'Director_1100', 80, 1100);
+insert into DEPARTAMENTE values (1015, 'Director_1200', 45, 1200);
+insert into DEPARTAMENTE values (1016, 'Director_1300', 30, 1300);
+insert into DEPARTAMENTE values (1017, 'Director_1400', 100, 1400);
+insert into DEPARTAMENTE values (1018, 'Director_1500', 30, 1500);
+ 
+ 
+
+
+
+insert into ANGAJATI values (111, 'Popescu', '21-03-2010', 2000, 1001);
+insert into ANGAJATI values (112, 'Marinescu', '18-09-2009', 5000, 1002);
+insert into ANGAJATI values (113, 'Popa', '20-05-2011', 4500, 1003);
+insert into ANGAJATI values (114, 'Spataru', '03-03-2010', 6300, 1004);
+insert into ANGAJATI values (115, 'Nastase', '04-05-2003', 5200, 1005);
+insert into ANGAJATI values (116, 'Afrim', '01-08-2013', 3900, 1006);
+insert into ANGAJATI values (117, 'Alexa', '15-12-2015', 4800, 1007);
+insert into ANGAJATI values (118, 'Ionita', '21-10-2012', 6700, 1008);
+insert into ANGAJATI values (119, 'Bercu', '17-02-2005', 5400, 1009);
+insert into ANGAJATI values (120, 'Nita', '18-08-2013', 5500, 1010);
+insert into ANGAJATI values (121, 'Plesa', '27-06-2014', 5500, 1011);
+insert into ANGAJATI values (122, 'Duta', '05-07-2004', 7200, 1012);
+insert into ANGAJATI values (123, 'Hobbs', '03-03-2010', 8900, 1013);
+insert into ANGAJATI values (124, 'Sargent', '21-09-2012', 9200, 1014);
+insert into ANGAJATI values (125, 'Galloway', '02-02-2006', 10000, 1015);
+insert into ANGAJATI values (126, 'Connolly', '04-08-2013', 9500, 1016);
+insert into ANGAJATI values (127, 'Holcomb', '05-06-2014', 9800, 1017);
+insert into ANGAJATI values (128, 'Sheehan', '08-09-2004', 8800, 1018);
+insert into ANGAJATI values (129, 'Thornton', '09-08-1995', 8330, 1001);
+insert into ANGAJATI values (130, 'Villegas', '03-01-1996', 9400, 1002);
+insert into ANGAJATI values (131, 'Stanton', '30-06-1997', 8770, 1003);
+insert into ANGAJATI values (132, 'Taylor', '18-09-1997', 4100, 1004);
+insert into ANGAJATI values (133, 'Bates', '14-11-1997', 8630, 1005);
+insert into ANGAJATI values (134, 'Ingram', '01-06-2000', 7400, 1006);
+insert into ANGAJATI values (135, 'Carey', '14-08-2000', 8900, 1007);
+insert into ANGAJATI values (136, 'Patton', '18-04-2003', 2550, 1008);
+insert into ANGAJATI values (137, 'Howe', '25-06-2003', 6940, 1009);
+insert into ANGAJATI values (138, 'Herman', '04-04-2005', 3670, 1010);
+insert into ANGAJATI values (139, 'Castillo', '03-03-2010', 5970, 1011);
+insert into ANGAJATI values (140, 'Heath', '08-01-2014', 7820, 1012);
+insert into ANGAJATI values (141, 'Kelley', '02-08-2016', 3180, 1013);
+
+ 
+
+
+
+insert into TURN_CONTROL values (900, 600, 30, 1000);
+insert into TURN_CONTROL values (910, 1500, 50, 1100);
+insert into TURN_CONTROL values (920, 2000, 100, 1200);
+insert into TURN_CONTROL values (930, 1900, 80, 1300);
+insert into TURN_CONTROL values (940, 2500, 150, 1400);
+insert into TURN_CONTROL values (950, 4000, 200, 1500);
+
+ 
+
+
+
+insert into PASAGERI values (90, 'Popa', 'Romana', 'Germania', 1000);
+insert into PASAGERI values (91, 'Phan', 'Chineza', 'Japonia', 1500);
+insert into PASAGERI values (92, 'Edwards', 'Irlandeza', 'Argentina', 1200);
+insert into PASAGERI values (93, 'Bass', 'Britanica', 'Egipt', 1100);
+insert into PASAGERI values (94, 'Senior', 'Canadiana', 'Ungaria', 1300);
+insert into PASAGERI values (95, 'Mcclain', 'Americana', 'Finlanda', 1400);
+insert into PASAGERI values (100, 'King', 'Romana', 'Italia', 1000);
+insert into PASAGERI values (101, 'Liu', 'Chineza', 'Australia', 1500);
+insert into PASAGERI values (102, 'Lott', 'Britanica', 'SUA', 1200);
+insert into PASAGERI values (103, 'Bishop', 'Canadiana', 'Africa de Sud', 1100);
+insert into PASAGERI values (104, 'Medina', 'Italiana', 'Franta', 1300);
+insert into PASAGERI values (105, 'Franks', 'Americana', 'Ucraina', 1400);
+
+ 
+
+
+
+insert into BILETE values (500, 'TAROM', 100, 100);
+insert into BILETE values (501, 'KLM', 300, 101);
+insert into BILETE values (502, 'British Airways', 200, 102);
+insert into BILETE values (503, 'AirChina', 500, 103);
+insert into BILETE values (504, 'Delta', 700, 104);
+insert into BILETE values (505, 'AirFrance', 400, 105);
+insert into BILETE values (506, 'TAROM', 200, 90);
+insert into BILETE values (507, 'KLM', 400, 91);
+insert into BILETE values (508, 'British Airways', 500, 92);
+insert into BILETE values (509, 'AirChina', 400, 93);
+insert into BILETE values (510, 'Delta', 800, 94);
+insert into BILETE values (511, 'AirFrance', null, 95);
+
+ 
+
+
+
+insert into BAGAJE values (10, 'Bucuresti', 1000, 100);
+insert into BAGAJE values (11, 'Beijing', 1500, 101);
+insert into BAGAJE values (12, 'Londra', 1200, 102);
+insert into BAGAJE values (13, 'Amsterdam', 1100, 103);
+insert into BAGAJE values (14, 'Paris', 1300, 104);
+insert into BAGAJE values (15, 'New York', 1400, 105);
+insert into BAGAJE values (16, 'Bucuresti', 1000, 90);
+insert into BAGAJE values (17, 'Beijing', 1500, 91);
+insert into BAGAJE values (18, 'Londra', 1200, 92);
+insert into BAGAJE values (19, 'Amsterdam', 1100, 93);
+insert into BAGAJE values (20, 'Paris', 1300, 94);
+insert into BAGAJE values (21, 'New York', 1400, 95);
+
+ 
+
+
+
+insert into DESTINATIE values (3000, 20, 1000, 100);
+insert into DESTINATIE values (3100, 15, 1500, 101);
+insert into DESTINATIE values (3200, 01, 1200, 102);
+insert into DESTINATIE values (3300, 10, 1100, 103);
+insert into DESTINATIE values (3400, 19, 1300, 104);
+insert into DESTINATIE values (3500, 12, 1400, 105);
+insert into DESTINATIE values (3001, 07, 1000, 90);
+insert into DESTINATIE values (3101, 15, 1500, 91);
+insert into DESTINATIE values (3201, 23, 1200, 92);
+insert into DESTINATIE values (3301, 02, 1100, 93);
+insert into DESTINATIE values (3401, 21, 1300, 94);
+insert into DESTINATIE values (3501, 11, 1400, 95);
+
+ 
+
+
+
+insert into COMPANII_AERIENE values (800, 'TAROM', 50, 'Bucuresti', 1000);
+insert into COMPANII_AERIENE values (810, 'KLM', 300, 'Amsterdam', 1100);
+insert into COMPANII_AERIENE values (820, 'British Airways', 350, 'Londra', 1200);
+insert into COMPANII_AERIENE values (830, 'AirFrance', 250, 'Paris', 1300);
+insert into COMPANII_AERIENE values (840, 'Delta', 500, 'New York', 1400);
+insert into COMPANII_AERIENE values (850, 'AirChina', 400, 'Beijing', 1500);
+
+ 
+
+
+
+insert into AVIOANE values (50, 'Boeing 707', 800);
+insert into AVIOANE values (51, 'Boeing 787', 800);
+insert into AVIOANE values (52, 'Airbus A300', 810);
+insert into AVIOANE values (53, 'Airbus A340', 810);
+insert into AVIOANE values (54, 'Airbus A310', 820);
+insert into AVIOANE values (55, 'Airbus A330', 820);
+insert into AVIOANE values (56, 'Boeing 717', 830);
+insert into AVIOANE values (57, 'ATR 42', 830);
+insert into AVIOANE values (58, 'Airbus A380', 840);
+insert into AVIOANE values (59, 'Airbus A320', 840);
+insert into AVIOANE values (60, 'Boeing 777', 850);
+insert into AVIOANE values (61, 'Boeing 747', 850);
+
+ 
+
+
+
+insert into ZBORURI values (5000, 'Bucuresti', 2, 1000, 800);
+insert into ZBORURI values (5100, 'Amsterdam', 3, 1100, 810);
+insert into ZBORURI values (5200, 'Londra', 5, 1200, 820);
+insert into ZBORURI values (5300, 'Paris', 1, 1300, 830);
+insert into ZBORURI values (5400, 'New York', 10, 1400, 840);
+insert into ZBORURI values (5500, 'Beijing', 8, 1500, 850);
+
+ 
+
+
+
+insert into AJUNG values (1000, 10, 100);
+insert into AJUNG values (1100, 11, 101);
+insert into AJUNG values (1200, 12, 102);
+insert into AJUNG values (1300, 13, 103);
+insert into AJUNG values (1400, 14, 104);
+insert into AJUNG values (1500, 15, 105);
+insert into AJUNG values (1000, 16, 90);
+insert into AJUNG values (1100, 17, 91);
+insert into AJUNG values (1200, 18, 92);
+insert into AJUNG values (1300, 19, 93);
+insert into AJUNG values (1400, 20, 94);
+insert into AJUNG values (1500, 21, 95);
+
+ 
+
+
+
+insert into ESTE_TRANZITAT values (1000, 10);
+insert into ESTE_TRANZITAT values (1100, 11);
+insert into ESTE_TRANZITAT values (1200, 12);
+insert into ESTE_TRANZITAT values (1300, 13);
+insert into ESTE_TRANZITAT values (1400, 14);
+insert into ESTE_TRANZITAT values (1500, 15);
+insert into ESTE_TRANZITAT values (1000, 16);
+insert into ESTE_TRANZITAT values (1100, 17);
+insert into ESTE_TRANZITAT values (1200, 18);
+insert into ESTE_TRANZITAT values (1300, 19);
+insert into ESTE_TRANZITAT values (1400, 20);
+insert into ESTE_TRANZITAT values (1500, 21);
+
+
+
+
+6.
+
+create or replace procedure exercitiul6_ir (a aeroport.nume_aeroport%type) as
+    type tablou_dep is table of departamente.nume_departament%type index by pls_integer;
+    t tablou_dep;
+    v_id aeroport.id_aeroport%type;
+    v_director departamente.id_departament%type;
+    type tablou_angajati is table of angajati.nume_angajat%type;
+    ta tablou_angajati := tablou_angajati();
+    v_salariu angajati.salariu_angajati%type;
+    numar int;
+    v_medie int;
+
+    begin
+        select id_aeroport
+        into v_id
+        from aeroport
+        where upper(nume_aeroport)=upper(a); 
+        
+        select id_departament
+        into v_director
+        from departamente
+        where v_id=id_aeroport and nume_departament like 'Director%';
+    
+        select nume_departament
+        bulk collect into t 
+        from departamente 
+        where v_id=id_aeroport and id_departament != v_director;
+        
+        for i in t.first..t.last loop 
+                    select round(avg(salariu_angajati))
+                    into v_medie
+                    from angajati a, departamente dep
+                    where a.id_departament=dep.id_departament and dep.nume_departament=t(i);
+                        
+                    DBMS_OUTPUT.PUT('In departamentul ' || t(i) || ' cu salariul mediu ' || v_medie ||  ' lucreaza angajatii: ');
+                    DBMS_OUTPUT.NEW_LINE;
+                    
+                    select a.nume_angajat
+                    bulk collect into ta
+                    from angajati a, departamente dep
+                    where a.id_departament=dep.id_departament and dep.nume_departament=t(i);
+                    
+                    numar:=1;
+                    
+                    for j in ta.first..ta.last loop                      
+                        DBMS_OUTPUT.PUT(numar || '. ' || ta(j) || ', avand salariul ');
+                        
+                        numar := numar +1;
+                        
+                        select salariu_angajati
+                        into v_salariu
+                        from angajati
+                        where ta(j)=nume_angajat;
+                        
+                        DBMS_OUTPUT.PUT(v_salariu || ' care este mai ');
+                        
+                        if v_salariu >= v_medie then
+                            DBMS_OUTPUT.PUT('mare decat media salariilor din departament.');
+                        else
+                            DBMS_OUTPUT.PUT('mic decat media salariilor din departament.');
+                        end if;
+                        DBMS_OUTPUT.NEW_LINE;
+                    end loop;   
+                    DBMS_OUTPUT.NEW_LINE;
+        end loop; 
+end exercitiul6_ir;
+/
+
+begin
+    exercitiul6_ir('Schipol');
+end;
+/
+
+
+
+
+7.	 
+
+create or replace procedure exercitiul7_ir(nat pasageri.nationalitate%type) as
+    v_nume varchar2(10);
+    type tablou_pasageri is table of pasageri.nume_pasager%type;
+    t tablou_pasageri;
+    v_id pasageri.id_pasager%type;
+    v_operator bilete.operator_bilet%type;
+    v_pret bilete.pret%type;
+    v_ora destinatie.ora_sosirii%type;
+    v_destinatie bagaje.destinatie_finala_bagaj%type;
+    v_aeroport aeroport.nume_aeroport%type;
+    cursor c1 is 
+        select nume_pasager
+        from pasageri
+        where upper(nationalitate)=upper(nat);
+        
+    cursor c2(pid pasageri.id_pasager%type) is
+        select bil.operator_bilet, bil.pret, d.ora_sosirii, b.destinatie_finala_bagaj, a.nume_aeroport 
+        from bilete bil, destinatie d, bagaje b, aeroport a, pasageri p
+        where pid=bil.id_pasager and pid=d.id_pasager and pid=b.id_pasager and 
+            d.id_aeroport=a.id_aeroport and b.id_aeroport=a.id_aeroport and 
+            p.id_aeroport=a.id_aeroport;
+    
+    begin
+        DBMS_OUTPUT.PUT_LINE('Cetatenii americani care tranziteaza reteaua de aeroporturi sunt: ');
+        DBMS_OUTPUT.NEW_LINE;
+        
+        for i in c1 loop
+            DBMS_OUTPUT.PUT(i.nume_pasager || ' ');
+            
+            select id_pasager
+            into v_id
+            from pasageri
+            where upper(nume_pasager)=upper(i.nume_pasager);
+            
+            open c2(v_id);
+            fetch c2 into v_operator, v_pret, v_ora, v_destinatie, v_aeroport;
+            
+            if v_pret is null then
+                DBMS_OUTPUT.PUT_LINE('care a castigat biletul de avion vandut de ' || v_operator || ' si va ateriza la ora ' || v_ora || ' pe aeroportul ' || v_aeroport || ' din orasul ' || v_destinatie);
+            else
+                DBMS_OUTPUT.PUT_LINE('care a cumparat biletul de avion vandut de ' || v_operator || ' cu pretul de ' || v_pret ||  ' si va ateriza la ora ' || v_ora || ' pe aeroportul ' || v_aeroport || ' din orasul ' || v_destinatie);
+            end if;
+            
+            close c2;
+            --DBMS_OUTPUT.NEW_LINE;
+        end loop;
+end exercitiul7_ir;
+/
+
+begin
+    exercitiul7_ir('americana');
+end;
+/
+ 
+
+
+
+8.	
+
+insert into AEROPORT values (1600, 'El Prat', 'Barcelona', 900, 90000);
+
+ 
+
+insert into TURN_CONTROL values (960, 500, 20, 1600);
+
+ 
+
+insert into COMPANII_AERIENE values (860, 'EasyJet', 30, 'Eindhoven', 1100);
+
+ 
+
+insert into AVIOANE values (62, 'Airbus 330', 860);
+
+ 
+
+insert into ZBORURI values (5600, 'Amsterdam', 2, 1100, 860);
+
+ 
+
+
+create or replace function exercitiul8_ir(tid turn_control.id_turn_control%type) return varchar2 is
+    e1 exception;
+    e2 exception;
+    --v_nume companii_aeriene.nume_companie%type;
+    v_id aeroport.id_aeroport%type;
+    type tablou is table of companii_aeriene.nume_companie%type;
+    t tablou;
+    
+    begin
+        if tid<900 or tid>999 then 
+            raise e1;
+        end if;
+        
+        select id_aeroport
+        into v_id
+        from turn_control
+        where id_turn_control=tid;
+        
+        --DBMS_OUTPUT.PUT_LINE(v_id);
+        
+        select c.nume_companie
+        bulk collect into t
+        from companii_aeriene c
+        where v_id=c.id_aeroport and c.id_companie in ( select id_companie
+                                                        from avioane
+                                                        where tip_avion like '%bus%') and c.id_companie in (select id_companie
+                                                                                                        from zboruri
+                                                                                                        where upper(destinatie_zbor)='AMSTERDAM'
+                                                                                                        );
+        
+        if t.count()<1 then
+           raise e2;
+        else
+            return('Id valid');
+        end if;
+        
+        exception 
+            when e1 then return('Id invalid');
+            when e2 then return('Nu se indeplinesc conditiile.');
+            when others then return('Cod de eroare: ' || sqlcode);
+end exercitiul8_ir;
+/
+
+begin
+    DBMS_OUTPUT.PUT_LINE(exercitiul8_ir(800));
+    DBMS_OUTPUT.PUT_LINE(exercitiul8_ir(910));    
+    DBMS_OUTPUT.PUT_LINE(exercitiul8_ir(960));
+    DBMS_OUTPUT.PUT_LINE(exercitiul8_ir(970));
+end;
+/
+ 
+
+
+
+9.	 
+
+insert into PASAGERI values (106, 'Edwards', 'Franceza', 'Brazilia', 1200);
+insert into PASAGERI values (107, 'Edwards', 'Austriaca', 'Spania', 1300);
+
+create or replace procedure exercitiul9_ir(pnume pasageri.nume_pasager%type) as
+    e1 exception;
+    e2 exception;
+    type tablou_nume is table of pasageri.nume_pasager%type;
+    t tablou_nume;
+    v_ora varchar2(10);
+    
+    begin
+        select nume_pasager
+        bulk collect into t
+        from pasageri
+        where nume_pasager=pnume;
+        
+        if sql%notfound then 
+            raise e2;
+        end if;
+        
+        if t.count()>=2 then
+            raise e1;
+        end if;
+        
+        for i in t.first..t.last loop
+            select d.ora_sosirii
+            into v_ora
+            from destinatie d, pasageri p
+            where p.nume_pasager=t(i) and p.id_pasager=d.id_pasager and p.id_pasager in (   select id_pasager
+                                                                                            from bilete
+                                                                                            where operator_bilet in (   select nume_companie
+                                                                                                                        from companii_aeriene
+                                                                                                                        where id_aeroport in (  select id_aeroport
+                                                                                                                                                from aeroport 
+                                                                                                                                                where upper(locatie_aeroport)='BUCURESTI'
+                                                                                        )));
+            DBMS_OUTPUT.PUT_LINE('Ora sosirii pasagerului ' || t(i) || ' este ' || v_ora);
+        end loop;
+        
+        exception
+            when e1 then DBMS_OUTPUT.PUT_LINE('Exista mai multi calatori cu acest nume');
+            when e2 then DBMS_OUTPUT.PUT_LINE('Nu exista calatori cu acest nume');
+            when others then DBMS_OUTPUT.PUT_LINE('Cod de eroare: ' || sqlcode);
+end exercitiul9_ir;
+/
+
+begin
+    exercitiul9_ir('Edwards');
+    exercitiul9_ir('Iftimi');
+    exercitiul9_ir('Popa');
+end;
+/
+ 
+
+
+
+10.	
+
+create or replace trigger exercitiul10_ir
+    before insert or update or delete on angajati
+
+begin
+    if(to_char(sysdate, 'DD-MM')>'01-01' and to_char(sysdate, 'DD-MM')<'31-01')
+        then raise_application_error(-20001,'Nu se poate angaja personal in luna ianuarie.');
+    end if;
+end;
+/
+
+insert into angajati values (142, 'Surdu', '01-01-2023', 8330, 1001);
+
+
+
+
+11.	
+
+create or replace trigger exercitiul11_ir
+    before update of numar_angajati on departamente
+    for each row
+declare
+begin
+    if (:new.numar_angajati > :old.numar_angajati) 
+        then raise_application_error(-20001,'Departamentele nu suporta atat de multi angajati.');
+    end if;
+end;
+/
+
+update departamente
+set numar_angajati=numar_angajati+1000;
+
+ 
+
+
+12.	
+
+create table ir_ir(
+    utilizator varchar2(30),
+    nume_bd varchar2(50),
+    eveniment varchar2(20),
+    nume_obiect varchar2(30),
+    data date
+);
+
+create or replace trigger exercitiul12_ir
+    after create or drop or alter on schema
+
+begin
+    insert into ir_ir values(sys.login_user, sys.database_name, sys.sysevent, sys.dictionary_obj_name, sysdate);
+
+end;
+/
+ 
+ 
+
+
+create table magazine (
+    id_magazin int not null primary key,
+    nume_magazin varchar2(50)
+);
+
+select * from magazine;
+
+alter table magazine add (locatie varchar2(50));
+
+alter table magazine drop column locatie;
+
+drop table magazine;
+
+ 
+
+select * from ir_ir;
+ 
+ 
+
+
+14.
+create or replace package exercitiul14_ir as
+    type tabel_dep is table of departamente.nume_departament%type index by pls_integer;
+    t tabel_dep;
+
+    type tablou_angajati is table of angajati.nume_angajat%type;
+    ta tablou_angajati := tablou_angajati();
+    
+    function p_can(a aeroport.id_aeroport%type) return varchar2;
+    function p_bid(i pasageri.id_pasager%type) return number;
+    
+    procedure p_aid (a in aeroport.id_aeroport%type);
+    procedure p_pid (a in aeroport.id_aeroport%type, n in pasageri.nume_pasager%type); 
+
+end exercitiul14_ir;
+/
+
+create or replace package body exercitiul14_ir as
+    function p_can(a aeroport.id_aeroport%type) return varchar2 as
+        rez varchar2(100);
+    
+    begin
+        select nume_companie
+        into rez
+        from companii_aeriene
+        where id_aeroport=a;
+        
+    return rez;
+    end p_can;
+    
+    function p_bid(i pasageri.id_pasager%type) return number as
+        rez number;
+    
+    begin
+        select id_bilet
+        into rez
+        from bilete
+        where id_pasager=i;
+        
+    return rez;
+    end p_bid;
+    
+    procedure p_aid (a in aeroport.id_aeroport%type) as
+        rez varchar2(100);
+        numar int;
+        v_medie int;
+        v_salariu angajati.salariu_angajati%type;
+        
+    begin
+        
+        select nume_aeroport
+        into rez
+        from aeroport
+        where a=id_aeroport;
+        
+        DBMS_OUTPUT.PUT_LINE('Aeroportul cu id-ul ' || a || ' si numele: ' || rez || ' are ca departamente: ');
+    
+        select nume_departament
+        bulk collect into t 
+        from departamente 
+        where a=id_aeroport;
+        
+        for i in t.first..t.last loop 
+                    select round(avg(salariu_angajati))
+                    into v_medie
+                    from angajati a, departamente dep
+                    where a.id_departament=dep.id_departament and dep.nume_departament=t(i);
+                        
+                    DBMS_OUTPUT.PUT(t(i) || ' cu salariul mediu ' || v_medie ||  ' lucreaza angajatii: ');
+                    DBMS_OUTPUT.NEW_LINE;
+                    
+                    select a.nume_angajat
+                    bulk collect into ta
+                    from angajati a, departamente dep
+                    where a.id_departament=dep.id_departament and dep.nume_departament=t(i);
+                    
+                    numar:=1;
+                    
+                    for j in ta.first..ta.last loop                      
+                        DBMS_OUTPUT.PUT(numar || '. ' || ta(j) || ', avand salariul ');
+                        
+                        numar := numar +1;
+                        
+                        select salariu_angajati
+                        into v_salariu
+                        from angajati
+                        where ta(j)=nume_angajat;
+                        
+                        DBMS_OUTPUT.PUT(v_salariu || ' care este mai ');
+                        
+                        if v_salariu >= v_medie then
+                            DBMS_OUTPUT.PUT('mare decat media salariilor din departament.');
+                        else
+                            DBMS_OUTPUT.PUT('mic decat media salariilor din departament.');
+                        end if;
+                        DBMS_OUTPUT.NEW_LINE;
+                    end loop;   
+                    DBMS_OUTPUT.NEW_LINE;
+        end loop; 
+    
+    end p_aid;
+    
+    procedure p_pid (a in aeroport.id_aeroport%type, n in pasageri.nume_pasager%type) as
+        rez number;
+        
+    begin
+        select id_pasager 
+        into rez
+        from pasageri
+        where upper(n)=upper(nume_pasager);
+        
+        DBMS_OUTPUT.PUT_LINE('Pasagerul cu numele ' || n || ' si id-ul ' || rez || ', avand id-ul biletului ' || p_bid(rez) || ' ajunge pe aeroportul unde opereaza compania aeriana ' || p_can(a));
+    
+    end p_pid;
+
+end exercitiul14_ir;
+/
+
+
+execute exercitiul14_ir.p_pid(1000, 'Popa');
+execute exercitiul14_ir.p_aid(1000);
+
+
+ 
